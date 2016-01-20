@@ -3,7 +3,7 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
 from configparser import ConfigParser
-
+from subprocess import Popen
 import json
 import vk
 
@@ -29,6 +29,15 @@ def index(request):
         }, playlist))
         return JsonResponse(json.dumps(playlist), safe=False)
 
+
+@csrf_exempt
+def play(request):
+    if request.method == 'POST' and request.is_ajax:
+        url = request.POST['url']
+
+        player = Popen(['mpg123', url])
+        print(player)
+        return JsonResponse({'play': True})
 
 config = ConfigParser()
 config.read('/home/gott/PycharmProjects/Echolot/Echo/setting.ini')

@@ -20,12 +20,8 @@ function inc_progress(inc) {
 
 //Send request to server for play the song
 function play_song(e) {
-    $.ajax({
-        url: "http://localhost:8000/play",
-        method: 'post',
-        data: {'q': q},
-        success: success_ajax
-    });
+
+
 }
 
 //Create playlist from the answer of server
@@ -38,7 +34,16 @@ function success_ajax(playlist) {
         var m_li = $('#m'+i);
         var m = playlist[i];
         m_li.find('a').text(m.title);
-        m_li.find('a').click(function () { play_song(m.url); });
+        m_li.find('a').click(function (e) {
+             $.ajax({
+                 url: "http://localhost:8000/play/",
+                 method: 'post',
+                 data: {'url': m.url},
+                 success: function (a) {
+                    alert(a.play);
+                 }
+             });
+        });
         m_li.find('div').text(m.url);
     }
 }
