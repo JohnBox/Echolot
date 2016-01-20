@@ -3,14 +3,14 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
 from configparser import ConfigParser
-from subprocess import Popen
+from subprocess import Popen, PIPE, DEVNULL, run
 import json
 import vk
 
 
 @csrf_exempt
 def index(request):
-    N = 10
+    N = 20
     if request.method == 'GET':
         context = {
             'range': range(N),
@@ -33,9 +33,9 @@ def index(request):
 @csrf_exempt
 def play(request):
     if request.method == 'POST' and request.is_ajax:
+        run(['killall', '-9', 'mpg123'])
         url = request.POST['url']
-
-        player = Popen(['mpg123', url])
+        player = Popen(['mpg123', '-k 1', '-@', url], stdout=PIPE).stdout.read().decode()
         print(player)
         return JsonResponse({'play': True})
 

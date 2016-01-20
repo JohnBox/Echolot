@@ -33,19 +33,21 @@ function success_ajax(playlist) {
     for (var i = 0, l = playlist.length; i < l; ++i) {
         var m_li = $('#m'+i);
         var m = playlist[i];
-        m_li.find('a').text(m.title);
+        m_li.find('a').text(m.artist +' - ' + m.title);
+        m_li.find('a').attr('url', m.url);
         m_li.find('a').click(function (e) {
              $.ajax({
                  url: "http://localhost:8000/play/",
                  method: 'post',
-                 data: {'url': m.url},
+                 data: {'url': $(this).attr('url')},
                  success: function (a) {
-                    alert(a.play);
+                    //alert(a.play);
                  }
              });
         });
         m_li.find('div').text(m.url);
     }
+    playlist_ul.css('display', 'block');
 }
 
 function form_submit(e) {

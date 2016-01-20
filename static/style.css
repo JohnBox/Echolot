@@ -1,5 +1,10 @@
 body {
     background-color: #eee;
+    overflow-y: hidden;
+}
+
+#playlist {
+    display: none;
 }
 
 #progress-container {
